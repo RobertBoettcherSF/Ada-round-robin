@@ -14,12 +14,8 @@ Ada implementation of the Round-robin scheduling algorithm with three variants:
 ├── round_robin.gpr          # GPR project file
 ├── README.md                # This file
 └── tests/                   # Test suite
-    ├── round_robin_tests.adb  # Test implementations
-    ├── round_robin_tests.ads  # Test specifications
-    ├── run_tests.adb         # Test runner entry point
-    ├── run_tests.gpr         # Test project file
-    ├── run_tests.sh          # Shell script to run tests
-    └── obj/                  # Object files (generated)
+    ├── round_robin_tests.adb  # Test implementations (entry point)
+    └── round_robin_tests.ads  # Test specifications
 ```
 
 ## Building and Running
@@ -53,20 +49,18 @@ gnatmake round_robin.adb
 
 ### Running the Test Suite
 
+The tests are in `tests/round_robin_tests.adb` and can be run directly:
+
 ```bash
-# Method 1: Using the shell script (recommended)
-chmod +x tests/run_tests.sh
-./tests/run_tests.sh
-
-# Method 2: Manual compilation
+# Method 1: Compile and run directly
 cd tests
-gnatmake -P run_tests.gpr
-./obj/run_tests
+gnatmake round_robin_tests.adb
+./round_robin_tests
 
-# Method 3: Direct compilation
+# Method 2: From repository root
 cd tests
-gnatmake run_tests.adb round_robin_tests.adb
-./run_tests
+gnatmake round_robin_tests.adb
+./round_robin_tests
 ```
 
 ## Test Suite
