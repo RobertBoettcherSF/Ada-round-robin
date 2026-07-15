@@ -25,7 +25,6 @@ package body Round_Robin_Tests is
    end record;
 
    package Process_Lists is new Ada.Containers.Doubly_Linked_Lists (Process_Info);
-   use Process_Lists;
    subtype Process_Queue is Process_Lists.List;
 
    -- Test result tracking
@@ -62,11 +61,11 @@ package body Round_Robin_Tests is
    -- Helper to get queue length
    function Queue_Length (Queue : Process_Queue) return Natural is
       Count : Natural := 0;
-      Iter : Cursor := Queue.Iterate;
+      Iter : Process_Lists.Cursor := Queue.Iterate;
    begin
-      while Has_Next(Iter) loop
+      while Process_Lists.Has_Next(Iter) loop
          Count := Count + 1;
-         Next(Iter);
+         Process_Lists.Next(Iter);
       end loop;
       return Count;
    end Queue_Length;
@@ -74,30 +73,29 @@ package body Round_Robin_Tests is
    -- Helper to get total remaining time in queue
    function Total_Remaining_Time (Queue : Process_Queue) return Natural is
       Total : Natural := 0;
-      Iter : Cursor := Queue.Iterate;
+      Iter : Process_Lists.Cursor := Queue.Iterate;
       Proc : Process_Info;
    begin
-      while Has_Next(Iter) loop
-         Proc := Element(Iter);
+      while Process_Lists.Has_Next(Iter) loop
+         Proc := Process_Lists.Element(Iter);
          Total := Total + Proc.Remaining_Time;
-         Next(Iter);
+         Process_Lists.Next(Iter);
       end loop;
       return Total;
    end Total_Remaining_Time;
 
    -- Helper to find process by ID
    function Find_Process (Queue : Process_Queue; ID : Process_ID) return Process_Info is
-      Iter : Cursor := Queue.Iterate;
+      Iter : Process_Lists.Cursor := Queue.Iterate;
       Proc : Process_Info;
    begin
-      while Has_Next(Iter) loop
-         Proc := Element(Iter);
+      while Process_Lists.Has_Next(Iter) loop
+         Proc := Process_Lists.Element(Iter);
          if Proc.ID = ID then
             return Proc;
          end if;
-         Next(Iter);
+         Process_Lists.Next(Iter);
       end loop;
-      -- Return a default process if not found
       return Create_Process(ID, 0, 0);
    end Find_Process;
 
@@ -757,13 +755,13 @@ package body Round_Robin_Tests is
       
       declare
          IDs : array (1..3) of Process_ID;
-         Iter : Cursor := Queue.Iterate;
+         Iter : Process_Lists.Cursor := Queue.Iterate;
          Index : Positive := 1;
       begin
-         while Has_Next(Iter) loop
-            IDs(Index) := Element(Iter).ID;
+         while Process_Lists.Has_Next(Iter) loop
+            IDs(Index) := Process_Lists.Element(Iter).ID;
             Index := Index + 1;
-            Next(Iter);
+            Process_Lists.Next(Iter);
          end loop;
          
          Test_Assert_Equal_Positive (Natural(IDs(1)), 1, "First process should be ID 1");
@@ -912,14 +910,14 @@ package body Round_Robin_Tests is
       
       declare
          IDs : array (1..3) of Process_ID;
-         Iter : Cursor := Queue.Iterate;
+         Iter : Process_Lists.Cursor := Queue.Iterate;
          Index : Positive := 1;
          Unique : Boolean := True;
       begin
-         while Has_Next(Iter) loop
-            IDs(Index) := Element(Iter).ID;
+         while Process_Lists.Has_Next(Iter) loop
+            IDs(Index) := Process_Lists.Element(Iter).ID;
             Index := Index + 1;
-            Next(Iter);
+            Process_Lists.Next(Iter);
          end loop;
          
          for I in 1..2 loop
