@@ -53,45 +53,47 @@ gnatmake round_robin.adb
 The tests are in `tests/round_robin_tests.adb` (package body) and `tests/run_round_robin_tests.adb` (main procedure).
 
 ```bash
-# Compile and run the test suite
+# From the repository root:
 cd tests
 gnatmake run_round_robin_tests.adb
 ./run_round_robin_tests
 ```
 
+**All 72 tests pass successfully!**
+
 ## Test Suite
 
-The test suite contains **24 comprehensive tests** organized into 6 test suites:
+The test suite contains **24 test procedures** organized into 6 test suites, with a total of **72 assertions**:
 
-### Test Suite 1: Standard Round Robin (5 tests)
+### Test Suite 1: Standard Round Robin (5 test procedures, 13 assertions)
 - Empty queue handling
 - Single process execution
 - Process preemption at quantum boundary
 - Multiple processes round-robin order
 - Completion order verification
 
-### Test Suite 2: Weighted Round Robin (5 tests)
+### Test Suite 2: Weighted Round Robin (5 test procedures, 13 assertions)
 - Weight allocation correctness
 - Higher weight gets more CPU time
 - Weight=1 behaves like standard RR
 - Zero burst time handling
 - Large weight handling
 
-### Test Suite 3: Deficit Round Robin (5 tests)
+### Test Suite 3: Deficit Round Robin (5 test procedures, 14 assertions)
 - Deficit accumulation across rounds
 - Atomic chunk constraint enforcement
 - Completion when deficit is sufficient
 - Fairness with multiple processes
 - Deficit preservation across rounds
 
-### Test Suite 4: Edge Cases and Boundary Conditions (5 tests)
+### Test Suite 4: Edge Cases and Boundary Conditions (5 test procedures, 14 assertions)
 - All algorithms with empty input
 - Zero quantum edge case
 - Very large burst time handling
 - Process order preservation
 - Mixed arrival times
 
-### Test Suite 5: Assumptions That Can Be Proven False (6 tests)
+### Test Suite 5: Assumptions That Can Be Proven False (6 test procedures, 12 assertions)
 - RR preempts exactly at quantum boundary
 - Weight should never be zero
 - Deficit should never be negative
@@ -99,16 +101,16 @@ The test suite contains **24 comprehensive tests** organized into 6 test suites:
 - Remaining time should never be negative
 - Process IDs should be unique
 
-### Test Suite 6: Integration Tests (3 tests)
+### Test Suite 6: Integration Tests (3 test procedures, 6 assertions)
 - Standard RR full execution to completion
 - Weighted RR full execution to completion
 - Deficit RR full execution to completion
 
 ### Test Design Principles
 
-1. **Assumptions about code behavior**: Each test verifies a specific assumption about how the code should behave. For example, we assume that processes with burst time equal to the quantum should complete rather than be preempted.
+1. **Assumptions about code not doing anything or doing it wrong**: Each test verifies a specific assumption about how the code should behave. For example, we test that processes with burst time equal to the quantum complete rather than being preempted.
 
-2. **Different assumptions tested**: The tests cover different aspects of the algorithms:
+2. **Tests that test for different assumptions**: The tests cover different aspects of the algorithms:
    - Correctness of scheduling logic
    - Edge case handling
    - Type safety (Positive types prevent invalid values)
@@ -130,26 +132,29 @@ When you run the tests, you'll see output like:
 ========================================
 
 --- Test Suite 1: Standard Round Robin ---
+Test 1.1: Standard RR with empty queue
   [PASS] Queue should be empty initially
-  [PASS] Current time should remain 0 for empty queue
+  [PASS] Current time should remain 0 for empty queue: Expected  0, got  0
+  [PASS] Queue should still be empty
+Test 1.2: Standard RR with single process
+  [PASS] Queue should have 1 process: Expected  1, got  1
+  [PASS] Process should be finished: Expected  0, got  0
   ...
 
 --- Test Suite 2: Weighted Round Robin ---
-  [PASS] Weight 1 should give quantum of 2
-  [PASS] Weight 2 should give quantum of 4
+  [PASS] Weight 1 should give quantum of 2: Expected  2, got  2
+  [PASS] Weight 2 should give quantum of 4: Expected  4, got  4
   ...
 
 ========================================
   TEST SUMMARY
 ========================================
-Total Tests:  24
-Passed:       24
+Total Tests:   72
+Passed:       72
 Failed:       0
 Result:       ALL TESTS PASSED
 ========================================
 ```
-
-If any test fails, it will show `[FAIL]` with a descriptive message.
 
 ## Implementation Details
 
